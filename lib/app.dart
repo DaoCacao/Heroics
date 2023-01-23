@@ -1,5 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:heroics/main_screen.dart';
+import 'package:heroics/screen/enter/enter_route.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -11,12 +12,13 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      ],
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case "/":
-            return MaterialPageRoute(
-              builder: (context) => const MainScreen(),
-            );
+            return EnterRoute();
           default:
             return null;
         }
