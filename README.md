@@ -6,4 +6,14 @@ experience with Heroics!
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+After updating firebase libs run:
+
+```
+flutterfire configure
+```
+
+After updating splash screen settings run:
+
+```
+flutter pub run flutter_native_splash:create
+```

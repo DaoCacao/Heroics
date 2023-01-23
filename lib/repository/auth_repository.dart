@@ -9,7 +9,9 @@ class AuthRepository {
 
   AuthRepository(this.firebaseAuth);
 
-  bool isAuthorized() => firebaseAuth.currentUser != null;
+  bool isAuthorized() {
+    return firebaseAuth.currentUser != null;
+  }
 
   Future<SignUpAsGuestResult> signUpAsGuest() async {
     final credentials = await firebaseAuth.signInAnonymously();

@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "702781374001",
+    "firebase_url": "https://dnd5-charactersheet-default-rtdb.firebaseio.com",
+    "project_id": "dnd5-charactersheet",
+    "storage_bucket": "dnd5-charactersheet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702781374001:android:712cc505112d2af83d5f10",
+        "android_client_info": {
+          "package_name": "cacao.dao.heroics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702781374001-i4e7lendshj77hhgcm8ge3ds14rni1vg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJjvwFjSCfeI-7RgmJ2gqdKQ-Ul-pqee8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702781374001-i4e7lendshj77hhgcm8ge3ds14rni1vg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "702781374001-fs215p56o9rfvrm12pc76jhgt5o9uh7d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dao.cacao.dnd5CharacterSheet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702781374001:android:743fc63a0ce234923d5f10",
+        "android_client_info": {
+          "package_name": "dao.cacao.dnd5sheet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702781374001-i4e7lendshj77hhgcm8ge3ds14rni1vg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJjvwFjSCfeI-7RgmJ2gqdKQ-Ul-pqee8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702781374001-i4e7lendshj77hhgcm8ge3ds14rni1vg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "702781374001-fs215p56o9rfvrm12pc76jhgt5o9uh7d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dao.cacao.dnd5CharacterSheet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
