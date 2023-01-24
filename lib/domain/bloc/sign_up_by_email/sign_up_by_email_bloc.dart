@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:heroics/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
+import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 
 part 'sign_up_by_email_bloc.freezed.dart';
 

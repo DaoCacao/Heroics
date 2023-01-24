@@ -1,5 +1,5 @@
-import 'package:heroics/model/user_model.dart';
-import 'package:heroics/repository/auth_repository.dart';
+import 'package:heroics/data/repository/auth_repository.dart';
+import 'package:heroics/domain/model/user_model.dart';
 
 class SignInByEmailUseCase {
   final AuthRepository authRepository;

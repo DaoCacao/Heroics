@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heroics/bloc/sign_up_by_email/sign_up_by_email_bloc.dart'
-    as bloc;
-import 'package:heroics/cubit/sign_up_by_email/sign_up_by_email_cubit.dart' as cubit;
 import 'package:heroics/di/service_locator.dart';
-import 'package:heroics/screen/sign_up_by_email/sign_up_by_email_screen.dart';
+import 'package:heroics/domain/bloc/sign_up_by_email/sign_up_by_email_bloc.dart'
+    as bloc;
+import 'package:heroics/domain/cubit/sign_up_by_email/sign_up_by_email_cubit.dart'
+    as cubit;
+import 'package:heroics/presentation/screen/sign_up_by_email/sign_up_by_email_screen.dart';
 
 class SignUpByEmailRoute extends MaterialPageRoute {
   SignUpByEmailRoute.cubit()

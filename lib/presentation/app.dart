@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:heroics/screen/enter/enter_route.dart';
+
+import 'screen/enter/enter_route.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

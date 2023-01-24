@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:heroics/widget/email_text_field.dart';
-import 'package:heroics/widget/password_text_field.dart';
+import 'package:heroics/presentation/widget/email_text_field.dart';
+import 'package:heroics/presentation/widget/password_text_field.dart';
 
 class SignUpByEmailScreen extends StatelessWidget {
   final TextEditingController emailController;

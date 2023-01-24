@@ -1,4 +1,4 @@
-import 'package:heroics/repository/auth_repository.dart';
+import 'package:heroics/data/repository/auth_repository.dart';
 
 class SignOutUseCase {
   final AuthRepository authRepository;

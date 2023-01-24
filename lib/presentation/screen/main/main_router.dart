@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heroics/screen/main/main_screen.dart';
+import 'package:heroics/presentation/screen/main/main_screen.dart';
 
 class MainRouter extends MaterialPageRoute {
   MainRouter()

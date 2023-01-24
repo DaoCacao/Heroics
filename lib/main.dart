@@ -5,12 +5,12 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heroics/app_bloc_observer.dart';
+import 'package:heroics/logger/app_bloc_observer.dart';
 import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/firebase_options.dart';
 import 'package:logger/logger.dart';
 
-import 'app.dart';
+import 'presentation/app.dart';
 import 'logger/logger.dart';
 
 final log = Log(

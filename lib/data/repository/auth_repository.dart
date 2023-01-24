@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:heroics/mapper/user_mapper.dart';
-import 'package:heroics/use_case/sign_in_by_email_use_case.dart';
-import 'package:heroics/use_case/sign_up_as_guest_use_case.dart';
-import 'package:heroics/use_case/sign_up_by_email/sign_up_by_email_result.dart';
+import 'package:heroics/data/mapper/user_mapper.dart';
+import 'package:heroics/domain/use_case/sign_in_by_email_use_case.dart';
+import 'package:heroics/domain/use_case/sign_up_as_guest_use_case.dart';
+import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
