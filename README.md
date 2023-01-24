@@ -6,6 +6,12 @@ experience with Heroics!
 
 ## Getting Started
 
+For code generation run:
+
+```
+flutter pub run build_runner build
+```
+
 After updating firebase libs run:
 
 ```

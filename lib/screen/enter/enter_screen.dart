@@ -2,20 +2,16 @@ import 'package:flutter/material.dart';
 
 class EnterScreen extends StatelessWidget {
   final bool isLoading;
-  final bool isAuthorized;
-  final VoidCallback onSignUpClick;
+  final Function(bool isCubit) onSignUpClick;
   final VoidCallback onSignInClick;
   final VoidCallback onSignUpAsGuestClick;
-  final VoidCallback onSignOutClick;
 
   const EnterScreen({
     super.key,
     required this.isLoading,
-    required this.isAuthorized,
     required this.onSignUpClick,
     required this.onSignInClick,
     required this.onSignUpAsGuestClick,
-    required this.onSignOutClick,
   });
 
   @override
@@ -27,32 +23,30 @@ class EnterScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isAuthorized) ...[
-              const Text(
-                "Authorized as guest",
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ElevatedButton(
+                onPressed: () => onSignUpClick(true),
+                child: const Text("Sign up with email (cubit)"),
               ),
               ElevatedButton(
-                onPressed: isLoading ? null : onSignOutClick,
-                child: const Text("Sign out"),
+                onPressed: () => onSignUpClick(false),
+                child: const Text("Sign up with email (bloc)"),
               ),
-            ] else ...[
-              ElevatedButton(
-                onPressed: isLoading ? null : onSignUpClick,
-                child: const Text("Sign up with email"),
-              ),
-              ElevatedButton(
-                onPressed: isLoading ? null : onSignInClick,
-                child: const Text("Sign in with email"),
-              ),
+              // ElevatedButton(
+              //   onPressed: onSignInClick,
+              //   child: const Text("Sign in with email"),
+              // ),
               ElevatedButton(
                 onPressed: isLoading ? null : onSignUpAsGuestClick,
                 child: const Text("Continue as guest"),
               ),
             ],
-          ],
+          ),
         ),
       ),
     );

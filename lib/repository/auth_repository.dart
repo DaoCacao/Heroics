@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:heroics/mapper/user_mapper.dart';
 import 'package:heroics/use_case/sign_in_by_email_use_case.dart';
 import 'package:heroics/use_case/sign_up_as_guest_use_case.dart';
-import 'package:heroics/use_case/sign_up_by_email_use_case.dart';
+import 'package:heroics/use_case/sign_up_by_email/sign_up_by_email_result.dart';
 
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
@@ -29,15 +29,15 @@ class AuthRepository {
         password: password,
       );
       final user = mapUser(credentials.user!);
-      return SignUpByEmailResultSuccess(user);
+      return SignUpByEmailResult.success(user);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":
-          return SignUpByEmailResultAlreadyInUse();
+          return SignUpByEmailResult.alreadyInUse();
         case "invalid-email":
-          return SignUpByEmailResultInvalidEmail();
+          return SignUpByEmailResult.invalidEmail();
         case "weak-password":
-          return SignUpByEmailResultWeakPassword();
+          return SignUpByEmailResult.weakPassword();
         default:
           rethrow;
       }

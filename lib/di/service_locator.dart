@@ -5,7 +5,7 @@ import 'package:heroics/use_case/is_authorized_use_case.dart';
 import 'package:heroics/use_case/sign_in_by_email_use_case.dart';
 import 'package:heroics/use_case/sign_out_use_case.dart';
 import 'package:heroics/use_case/sign_up_as_guest_use_case.dart';
-import 'package:heroics/use_case/sign_up_by_email_use_case.dart';
+import 'package:heroics/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 
 void initServiceLocator() {
   GetIt.instance

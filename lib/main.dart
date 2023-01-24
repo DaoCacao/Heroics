@@ -14,7 +14,9 @@ import 'app.dart';
 import 'logger/logger.dart';
 
 final log = Log(
-  logger: Logger(),
+  logger: Logger(
+    printer: SimplePrinter(),
+  ),
 );
 
 void main() async {
