@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:heroics/data/mapper/user_mapper.dart';
-import 'package:heroics/domain/model/user_model.dart';
+import 'package:heroics/domain/model/profile_model.dart';
 import 'package:heroics/domain/use_case/sign_in_by_email/sign_in_by_email_use_case.dart';
 import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heroics/data/repository/auth_repository.dart';
-import 'package:heroics/domain/model/user_model.dart';
+import 'package:heroics/domain/model/profile_model.dart';
 
 part 'sign_up_by_email_use_case.freezed.dart';
 
