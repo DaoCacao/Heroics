@@ -24,11 +24,8 @@ class EnterRoute extends MaterialPageRoute {
               builder: (context, state) {
                 return EnterScreen(
                   isLoading: state is EnterStateLoading,
-                  onSignUpClick: (isCubit) => Navigator.push(
-                      context,
-                      isCubit
-                          ? SignUpByEmailRoute.cubit()
-                          : SignUpByEmailRoute.bloc()),
+                  onSignUpClick: () =>
+                      Navigator.push(context, SignUpByEmailRoute()),
                   onSignInClick: () =>
                       Navigator.push(context, SignInByEmailRoute()),
                   onSignUpAsGuestClick: () =>

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class EnterScreen extends StatelessWidget {
   final bool isLoading;
-  final Function(bool isCubit) onSignUpClick;
+  final VoidCallback onSignUpClick;
   final VoidCallback onSignInClick;
   final VoidCallback onSignUpAsGuestClick;
 
@@ -30,17 +30,13 @@ class EnterScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ElevatedButton(
-                onPressed: () => onSignUpClick(true),
-                child: const Text("Sign up with email (cubit)"),
+                onPressed: () => onSignUpClick(),
+                child: const Text("Sign up with email"),
               ),
               ElevatedButton(
-                onPressed: () => onSignUpClick(false),
-                child: const Text("Sign up with email (bloc)"),
+                onPressed: onSignInClick,
+                child: const Text("Sign in with email"),
               ),
-              // ElevatedButton(
-              //   onPressed: onSignInClick,
-              //   child: const Text("Sign in with email"),
-              // ),
               ElevatedButton(
                 onPressed: isLoading ? null : onSignUpAsGuestClick,
                 child: const Text("Continue as guest"),
