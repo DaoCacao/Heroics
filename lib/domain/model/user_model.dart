@@ -1,9 +1,11 @@
-class UserModel {
+class ProfileModel {
   final String id;
   final String name;
+  final bool isGuest;
 
-  UserModel({
+  ProfileModel({
     required this.id,
     required this.name,
+    required this.isGuest,
   });
 }

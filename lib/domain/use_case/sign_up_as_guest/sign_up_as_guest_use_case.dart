@@ -6,15 +6,7 @@ class SignUpAsGuestUseCase {
 
   SignUpAsGuestUseCase(this.authRepository);
 
-  Future<SignUpAsGuestResult> call() {
+  Future<ProfileModel> call() {
     return authRepository.signUpAsGuest();
   }
-}
-
-abstract class SignUpAsGuestResult {}
-
-class SignUpAsGuestResultSuccess extends SignUpAsGuestResult {
-  final UserModel user;
-
-  SignUpAsGuestResultSuccess(this.user);
 }

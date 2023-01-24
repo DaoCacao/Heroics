@@ -1,22 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:heroics/data/mapper/user_mapper.dart';
-import 'package:heroics/domain/use_case/sign_in_by_email_use_case.dart';
-import 'package:heroics/domain/use_case/sign_up_as_guest_use_case.dart';
+import 'package:heroics/domain/model/user_model.dart';
+import 'package:heroics/domain/use_case/sign_in_by_email/sign_in_by_email_use_case.dart';
 import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
 
-  AuthRepository(this.firebaseAuth);
+  const AuthRepository(this.firebaseAuth);
 
   bool isAuthorized() {
     return firebaseAuth.currentUser != null;
   }
 
-  Future<SignUpAsGuestResult> signUpAsGuest() async {
+  Future<ProfileModel> signUpAsGuest() async {
     final credentials = await firebaseAuth.signInAnonymously();
-    final user = mapUser(credentials.user!);
-    return SignUpAsGuestResultSuccess(user);
+    final user = mapProfile(credentials.user!);
+    return user;
   }
 
   Future<SignUpByEmailResult> signUpByEmail(
@@ -28,7 +28,7 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      final user = mapUser(credentials.user!);
+      final user = mapProfile(credentials.user!);
       return SignUpByEmailResult.success(user);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -53,18 +53,18 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      final user = mapUser(credentials.user!);
-      return SignInByEmailResultSuccess(user);
+      final user = mapProfile(credentials.user!);
+      return SignInByEmailResult.success(user);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "invalid-email":
-          return SignInByEmailResultInvalidEmail();
+          return SignInByEmailResult.invalidEmail();
         case "user-disabled":
-          return SignInByEmailResultUserNotFound();
+          return SignInByEmailResult.userNotFound();
         case "user-not-found":
-          return SignInByEmailResultUserNotFound();
+          return SignInByEmailResult.userNotFound();
         case "wrong-password":
-          return SignInByEmailResultWrongPassword();
+          return SignInByEmailResult.wrongPassword();
         default:
           rethrow;
       }

@@ -16,7 +16,7 @@ class SignUpByEmailUseCase {
 
 @freezed
 class SignUpByEmailResult with _$SignUpByEmailResult {
-  factory SignUpByEmailResult.success(UserModel user) = _Success;
+  factory SignUpByEmailResult.success(ProfileModel user) = _Success;
 
   factory SignUpByEmailResult.alreadyInUse() = _AlreadyInUse;
 
