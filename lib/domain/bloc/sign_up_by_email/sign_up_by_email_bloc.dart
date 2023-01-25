@@ -11,19 +11,11 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
     this._signUpByEmailUseCase,
   ) : super(SignUpByEmailState.initial()) {
     on<SignUpByEmailEvent>((event, emit) => event.map(
-          updateForm: (event) => _onUpdateForm(event, emit),
-          signUp: (event) => _onSignUp(event, emit),
+          signUp: (event) => _signUp(event, emit),
         ));
   }
 
-  void _onUpdateForm(
-    _UpdateForm event,
-    Emitter<SignUpByEmailState> emit,
-  ) {
-    emit(SignUpByEmailState.initial());
-  }
-
-  void _onSignUp(
+  void _signUp(
     _SignUp event,
     Emitter<SignUpByEmailState> emit,
   ) async {
@@ -42,16 +34,7 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
 
 @freezed
 class SignUpByEmailEvent with _$SignUpByEmailEvent {
-  factory SignUpByEmailEvent.updateForm(
-    String email,
-    String password,
-    String confirm,
-  ) = _UpdateForm;
-
-  factory SignUpByEmailEvent.signUp(
-    String email,
-    String password,
-  ) = _SignUp;
+  factory SignUpByEmailEvent.signUp(String email, String password) = _SignUp;
 }
 
 @freezed

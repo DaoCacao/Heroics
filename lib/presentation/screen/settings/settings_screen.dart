@@ -30,10 +30,7 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom,
-            ),
+          SafeArea(
             child: BlocListener<AuthBloc, AuthState>(
               listener: (context, state) => state.when(
                 initial: () => null,

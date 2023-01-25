@@ -24,13 +24,7 @@ class SignUpByEmailRoute extends MaterialPageRoute {
                 ),
                 confirmPasswordController: TextEditingController(),
                 confirmPasswordError: null,
-                onFormChange: (email, password, confirm) => context
-                    .read<SignUpByEmailBloc>()
-                    .add(SignUpByEmailEvent.updateForm(
-                      email,
-                      password,
-                      confirm,
-                    )),
+                onFormChange: (email, password, confirm) {},
                 onSignUpClick: (email, password) => context
                     .read<SignUpByEmailBloc>()
                     .add(SignUpByEmailEvent.signUp(
