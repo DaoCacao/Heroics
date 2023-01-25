@@ -5,16 +5,16 @@ import 'package:heroics/domain/use_case/sign_in_by_email/sign_in_by_email_use_ca
 import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 
 class AuthRepository {
-  final FirebaseAuth firebaseAuth;
+  final FirebaseAuth _firebaseAuth;
 
-  const AuthRepository(this.firebaseAuth);
+  const AuthRepository(this._firebaseAuth);
 
   bool isAuthorized() {
-    return firebaseAuth.currentUser != null;
+    return _firebaseAuth.currentUser != null;
   }
 
   Future<ProfileModel> signUpAsGuest() async {
-    final credentials = await firebaseAuth.signInAnonymously();
+    final credentials = await _firebaseAuth.signInAnonymously();
     final user = mapProfile(credentials.user!);
     return user;
   }
@@ -24,7 +24,7 @@ class AuthRepository {
     String password,
   ) async {
     try {
-      final credentials = await firebaseAuth.createUserWithEmailAndPassword(
+      final credentials = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -49,7 +49,7 @@ class AuthRepository {
     String password,
   ) async {
     try {
-      final credentials = await firebaseAuth.signInWithEmailAndPassword(
+      final credentials = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -71,5 +71,5 @@ class AuthRepository {
     }
   }
 
-  Future logout() => firebaseAuth.signOut();
+  Future logout() => _firebaseAuth.signOut();
 }

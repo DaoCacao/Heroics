@@ -5,13 +5,16 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heroics/logger/app_bloc_observer.dart';
 import 'package:heroics/di/service_locator.dart';
+import 'package:heroics/domain/bloc/auth/auth_bloc.dart';
+import 'package:heroics/domain/bloc/theme/theme_bloc.dart';
 import 'package:heroics/firebase_options.dart';
+import 'package:heroics/logger/app_bloc_observer.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'presentation/app.dart';
 import 'logger/logger.dart';
+import 'presentation/app.dart';
 
 final log = Log(
   logger: Logger(
@@ -47,6 +50,8 @@ void main() async {
 
   Bloc.observer = AppBlocObserver();
 
-  initServiceLocator();
+  initServiceLocator(
+    sharedPreferences: await SharedPreferences.getInstance(),
+  );
   runApp(const App());
 }

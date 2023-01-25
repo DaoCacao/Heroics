@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heroics/presentation/screen/enter/enter_state.dart';
-import 'package:heroics/presentation/screen/main/main_router.dart';
+import 'package:heroics/presentation/screen/settings/settings_route.dart';
 import 'package:heroics/presentation/screen/sign_in_by_email/sign_in_by_email_route.dart';
 import 'package:heroics/presentation/screen/sign_up_by_email/sign_up_by_email_route.dart';
 
@@ -18,7 +18,8 @@ class EnterRoute extends MaterialPageRoute {
                     initial: () {},
                     loading: () {},
                     authorized: () {
-                      Navigator.pushReplacement(context, MainRouter());
+                      // Navigator.pushReplacement(context, MainRoute());
+                      Navigator.pushReplacement(context, SettingsRoute());
                     });
               },
               builder: (context, state) {
