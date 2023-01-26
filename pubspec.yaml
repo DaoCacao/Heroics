@@ -37,10 +37,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  #  bloc_test: ^9.1.0
+  integration_test:
+    sdk: flutter
+  bloc_test: # ^9.0.2
   flutter_lints: ^2.0.0
-  build_runner: ^2.3.3
-  freezed: ^2.3.2
+  build_runner: # ^2.3.3
+  freezed: # ^2.3.2
 
 flutter:
   uses-material-design: true

@@ -90,6 +90,7 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
     }
     if (!_isPasswordValid(event.password)) {
       emit(state.copyWith(
+        email: event.email,
         password: event.password,
         error: const SignUpByEmailStateError.weakPassword(),
       ));
@@ -100,6 +101,8 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
       event.confirmPassword,
     )) {
       emit(state.copyWith(
+        email: event.email,
+        password: event.password,
         confirmPassword: event.confirmPassword,
         error: const SignUpByEmailStateError.confirmPasswordNotMatch(),
       ));
@@ -133,18 +136,19 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
   }
 
   /// Function to validate [email].
-  /// [email] must match with regex.
-  bool _isEmailValid(String email) => RegExp(_emailRegex).hasMatch(email);
+  /// [email] must be not empty and match with regex.
+  bool _isEmailValid(String email) =>
+      email.isNotEmpty && RegExp(_emailRegex).hasMatch(email);
 
   /// Function to validate [password].
-  /// [password] must match with regex.
+  /// [password] must be not empty and match with regex.
   bool _isPasswordValid(String password) =>
-      RegExp(_passwordRegex).hasMatch(password);
+      password.isNotEmpty && RegExp(_passwordRegex).hasMatch(password);
 
   /// Function to validate [confirmPassword].
-  /// Confirm password must match with [password].
+  /// Confirm password must be not empty and match with [password].
   bool _isConfirmPasswordValid(String password, String confirmPassword) =>
-      confirmPassword == password;
+      confirmPassword.isNotEmpty && password == confirmPassword;
 }
 
 /// Sign up by email event.
