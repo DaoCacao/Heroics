@@ -4,6 +4,7 @@ class EmailTextField extends TextFormField {
   EmailTextField({
     super.key,
     super.controller,
+    super.onChanged,
     required String label,
     String? error,
   }) : super(

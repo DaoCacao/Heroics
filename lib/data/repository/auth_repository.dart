@@ -19,6 +19,14 @@ class AuthRepository {
     return user;
   }
 
+  /// Sign up by email.
+  /// Using [email] and [password] to sign up.
+  /// This method will return [SignUpByEmailResult].
+  /// If sign up success, this method will return [SignUpByEmailResult.success].
+  /// If sign up failure, this method will return [SignUpByEmailResult.failure] with [error].
+  /// If email is already in use, [error] will be [SignUpByEmailResultError.alreadyInUse].
+  /// If email is invalid, [error] will be [SignUpByEmailResultError.invalidEmail].
+  /// If password is weak, [error] will be [SignUpByEmailResultError.weakPassword].
   Future<SignUpByEmailResult> signUpByEmail(
     String email,
     String password,
@@ -33,11 +41,17 @@ class AuthRepository {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":
-          return SignUpByEmailResult.alreadyInUse();
+          return SignUpByEmailResult.failure(
+            const SignUpByEmailResultError.alreadyInUse(),
+          );
         case "invalid-email":
-          return SignUpByEmailResult.invalidEmail();
+          return SignUpByEmailResult.failure(
+            const SignUpByEmailResultError.invalidEmail(),
+          );
         case "weak-password":
-          return SignUpByEmailResult.weakPassword();
+          return SignUpByEmailResult.failure(
+            const SignUpByEmailResultError.weakPassword(),
+          );
         default:
           rethrow;
       }

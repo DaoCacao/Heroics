@@ -1,77 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:heroics/presentation/widget/email_text_field.dart';
-import 'package:heroics/presentation/widget/password_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heroics/presentation/screen/settings/settings_route.dart';
+import 'package:heroics/presentation/screen/sign_up_by_email/sign_up_by_email_bloc.dart';
 
+import 'sign_up_by_email_screen_impl.dart';
+
+/// Sign up by email screen.
+/// This screen is used to sign up by email.
 class SignUpByEmailScreen extends StatelessWidget {
-  final TextEditingController emailController;
-  final String? emailError;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  final TextEditingController passwordController;
-  final String? passwordError;
-
-  final TextEditingController confirmPasswordController;
-  final String? confirmPasswordError;
-
-  final Function(String email, String password, String confirm) onFormChange;
-  final Function(String email, String password) onSignUpClick;
-
-  const SignUpByEmailScreen({
-    super.key,
-    required this.emailController,
-    required this.emailError,
-    required this.passwordController,
-    required this.passwordError,
-    required this.confirmPasswordController,
-    required this.confirmPasswordError,
-    required this.onFormChange,
-    required this.onSignUpClick,
-  });
+  SignUpByEmailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign up"),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            onChanged: () => onFormChange(
-              emailController.text,
-              passwordController.text,
-              confirmPasswordController.text,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                EmailTextField(
-                  controller: emailController,
-                  label: "Email",
-                  error: emailError,
-                ),
-                const SizedBox(height: 16),
-                PasswordTextField(
-                  controller: passwordController,
-                  label: "Password",
-                  error: passwordError,
-                ),
-                const SizedBox(height: 16),
-                PasswordTextField(
-                  controller: confirmPasswordController,
-                  label: "Confirm password",
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => onSignUpClick(
-                    emailController.text,
-                    passwordController.text,
-                  ),
-                  child: const Text("Sign up"),
-                )
-              ],
-            ),
+    return BlocProvider(
+      create: (context) => SignUpByEmailBloc(context.read()),
+      child: BlocConsumer<SignUpByEmailBloc, SignUpByEmailState>(
+        listener: (context, state) {
+          if (state.isSuccess) {
+            Navigator.pushAndRemoveUntil(
+                context, SettingsRoute(), (route) => false);
+          }
+        },
+        builder: (context, state) => SignUpByEmailScreenImpl(
+          emailController: _emailController,
+          onEmailChange: (email) => context
+              .read<SignUpByEmailBloc>()
+              .add(SignUpByEmailEvent.onEmailChange(email)),
+          emailError: state.error?.whenOrNull(
+            alreadyInUse: () => "Email already in use",
+            invalidEmail: () => "Invalid email",
           ),
+          passwordController: _passwordController,
+          onPasswordChange: (password) => context
+              .read<SignUpByEmailBloc>()
+              .add(SignUpByEmailEvent.onPasswordChange(password)),
+          passwordError: state.error?.whenOrNull(
+            weakPassword: () => "Weak password",
+          ),
+          confirmPasswordController: _confirmPasswordController,
+          onConfirmPasswordChange: (confirm) => context
+              .read<SignUpByEmailBloc>()
+              .add(SignUpByEmailEvent.onConfirmPasswordChange(confirm)),
+          confirmPasswordError: state.error?.whenOrNull(
+            confirmPasswordNotMatch: () => "Password not match",
+          ),
+          isSignUpEnable: !state.isLoading,
+          onSignUpClick: (email, password, confirm) =>
+              context.read<SignUpByEmailBloc>().add(SignUpByEmailEvent.onSignUp(
+                    email,
+                    password,
+                    confirm,
+                  )),
         ),
       ),
     );
