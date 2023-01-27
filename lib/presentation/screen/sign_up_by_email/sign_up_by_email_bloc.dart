@@ -33,22 +33,21 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
 
   /// Function to handle [SignUpByEmailEvent.onEmailChange].
   /// Emit idle() if state is not [_Loading].
-  void _onEmailChange(_OnEmailChange event, Emitter<SignUpByEmailState> emit) async {
+  void _onEmailChange(_OnEmailChange event, Emitter<SignUpByEmailState> emit) {
     if (state is _Loading) return;
     emit(const SignUpByEmailState.idle());
   }
 
   /// Function to handle [SignUpByEmailEvent.onPasswordChange].
   /// Emit idle() if state is not [_Loading].
-  void _onPasswordChange(_OnPasswordChange event, Emitter<SignUpByEmailState> emit) async {
+  void _onPasswordChange(_OnPasswordChange event, Emitter<SignUpByEmailState> emit) {
     if (state is _Loading) return;
     emit(const SignUpByEmailState.idle());
   }
 
   /// Function to handle [SignUpByEmailEvent.onConfirmPasswordChange].
   /// Emit idle() if state is not [_Loading].
-  void _onConfirmPasswordChange(
-      _OnConfirmPasswordChange event, Emitter<SignUpByEmailState> emit) async {
+  void _onConfirmPasswordChange(_OnConfirmPasswordChange event, Emitter<SignUpByEmailState> emit) {
     if (state is _Loading) return;
     emit(const SignUpByEmailState.idle());
   }

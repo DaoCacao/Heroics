@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/domain/bloc/auth/auth_bloc.dart';
 import 'package:heroics/presentation/screen/settings/settings_screen.dart';
 
@@ -8,7 +9,7 @@ class SettingsRoute extends MaterialPageRoute {
       : super(
           builder: (context) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => AuthBloc(context.read())),
+              BlocProvider<AuthBloc>(create: (context) => inject()),
             ],
             child: const SettingsScreen(),
           ),

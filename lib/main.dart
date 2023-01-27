@@ -4,46 +4,27 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heroics/di/app_firebase_provider.dart';
-import 'package:heroics/di/app_local_storage_provider.dart';
-import 'package:heroics/di/app_repository_provider.dart';
-import 'package:heroics/di/app_use_case_provider.dart';
+import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/firebase_options.dart';
 import 'package:heroics/logger/app_bloc_observer.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'logger/logger.dart';
 import 'presentation/app.dart';
 
-final log = Log(
-  logger: Logger(
-    printer: SimplePrinter(),
-  ),
-);
+final log = Log(logger: Logger(printer: SimplePrinter()));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  _initFirebase();
+  await setupDependencies();
+  await _initFirebase();
   Bloc.observer = AppBlocObserver();
 
-  runApp(
-    AppLocalStorageProvider(
-      sharedPreferences: await SharedPreferences.getInstance(),
-      child: AppFirebaseProvider(
-        child: AppRepositoryProvider(
-          child: AppUseCaseProvider(
-            child: const App(),
-          ),
-        ),
-      ),
-    ),
-  );
+  runApp(const App());
 }
 
 /// Initialize Firebase services.
-void _initFirebase() async {
+Future _initFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

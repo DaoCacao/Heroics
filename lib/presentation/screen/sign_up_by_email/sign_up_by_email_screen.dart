@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/presentation/screen/settings/settings_route.dart';
 import 'package:heroics/presentation/screen/sign_up_by_email/sign_up_by_email_bloc.dart';
 
@@ -16,47 +17,59 @@ class SignUpByEmailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SignUpByEmailBloc(context.read()),
+    return BlocProvider<SignUpByEmailBloc>(
+      create: (context) => inject(),
       child: BlocConsumer<SignUpByEmailBloc, SignUpByEmailState>(
-        listener: (context, state) {
-          if (state.isSuccess) {
-            Navigator.pushAndRemoveUntil(
-                context, SettingsRoute(), (route) => false);
-          }
-        },
+        listener: (context, state) => state.whenOrNull(
+          success: () => Navigator.pushAndRemoveUntil(context, SettingsRoute(), (route) => false),
+        ),
         builder: (context, state) => SignUpByEmailScreenImpl(
           emailController: _emailController,
-          onEmailChange: (email) => context
-              .read<SignUpByEmailBloc>()
-              .add(SignUpByEmailEvent.onEmailChange(email)),
-          emailError: state.error?.whenOrNull(
-            alreadyInUse: () => "Email already in use",
-            invalidEmail: () => "Invalid email",
+          onEmailChange: (email) => _onEmailChange(context, email),
+          emailError: state.whenOrNull(
+            failure: (error) => error.whenOrNull(
+              alreadyInUse: () => "Email already in use",
+              invalidEmail: () => "Invalid email",
+            ),
           ),
           passwordController: _passwordController,
-          onPasswordChange: (password) => context
-              .read<SignUpByEmailBloc>()
-              .add(SignUpByEmailEvent.onPasswordChange(password)),
-          passwordError: state.error?.whenOrNull(
-            weakPassword: () => "Weak password",
+          onPasswordChange: (password) => _onPasswordChange(context, password),
+          passwordError: state.whenOrNull(
+            failure: (error) => error.whenOrNull(
+              weakPassword: () => "Weak password",
+            ),
           ),
           confirmPasswordController: _confirmPasswordController,
-          onConfirmPasswordChange: (confirm) => context
-              .read<SignUpByEmailBloc>()
-              .add(SignUpByEmailEvent.onConfirmPasswordChange(confirm)),
-          confirmPasswordError: state.error?.whenOrNull(
-            confirmPasswordNotMatch: () => "Password not match",
+          onConfirmPasswordChange: (confirm) => _onConfirmPasswordChange(context, confirm),
+          confirmPasswordError: state.whenOrNull(
+            failure: (error) => error.whenOrNull(
+              confirmPasswordNotMatch: () => "Password not match",
+            ),
           ),
-          isSignUpEnable: !state.isLoading,
+          isSignUpEnable: state.maybeWhen(
+            loading: () => false,
+            orElse: () => true,
+          ),
           onSignUpClick: (email, password, confirm) =>
-              context.read<SignUpByEmailBloc>().add(SignUpByEmailEvent.onSignUp(
-                    email,
-                    password,
-                    confirm,
-                  )),
+              _onSignUpClick(context, email, password, confirm),
         ),
       ),
     );
+  }
+
+  void _onEmailChange(BuildContext context, String email) {
+    context.read<SignUpByEmailBloc>().add(SignUpByEmailEvent.onEmailChange(email));
+  }
+
+  void _onPasswordChange(BuildContext context, String password) {
+    context.read<SignUpByEmailBloc>().add(SignUpByEmailEvent.onPasswordChange(password));
+  }
+
+  void _onConfirmPasswordChange(BuildContext context, String confirm) {
+    context.read<SignUpByEmailBloc>().add(SignUpByEmailEvent.onConfirmPasswordChange(confirm));
+  }
+
+  void _onSignUpClick(BuildContext context, String email, String password, String confirm) {
+    context.read<SignUpByEmailBloc>().add(SignUpByEmailEvent.onSignUp(email, password, confirm));
   }
 }

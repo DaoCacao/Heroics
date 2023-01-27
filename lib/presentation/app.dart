@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/domain/bloc/auth/auth_bloc.dart';
 import 'package:heroics/domain/bloc/theme/theme_bloc.dart';
 import 'package:heroics/presentation/screen/enter/enter_route.dart';
@@ -12,8 +13,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ThemeBloc(context.read()),
+    return BlocProvider<ThemeBloc>(
+      create: (context) => inject(),
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) => AppImpl(
           theme: state.when(
@@ -53,8 +54,8 @@ class RouteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(context.read())..add(AuthEvent.check()),
+    return BlocProvider<AuthBloc>(
+      create: (context) => inject()..add(AuthEvent.check()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) => state.when(
           initial: () => null,
