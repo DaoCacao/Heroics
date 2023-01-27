@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heroics/data/repository/auth_repository.dart';
-import 'package:heroics/domain/model/profile_model.dart';
 
 part 'sign_up_by_email_use_case.freezed.dart';
 
@@ -12,10 +11,7 @@ class SignUpByEmailUseCase {
 
   SignUpByEmailUseCase(this.authRepository);
 
-  Future<SignUpByEmailResult> call({
-    required String email,
-    required String password,
-  }) async {
+  Future<SignUpByEmailResult> call(String email, String password) async {
     return authRepository.signUpByEmail(email, password);
   }
 }
@@ -24,8 +20,7 @@ class SignUpByEmailUseCase {
 @freezed
 class SignUpByEmailResult with _$SignUpByEmailResult {
   /// Sign up by email success.
-  /// This result will return [ProfileModel] when sign up by email success.
-  factory SignUpByEmailResult.success(ProfileModel user) = _Success;
+  factory SignUpByEmailResult.success() = _Success;
 
   /// Sign up by email failure.
   /// This result will return [SignUpByEmailResultError] when sign up by email failure.

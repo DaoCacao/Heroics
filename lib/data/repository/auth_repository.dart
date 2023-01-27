@@ -36,8 +36,7 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      final user = mapProfile(credentials.user!);
-      return SignUpByEmailResult.success(user);
+      return SignUpByEmailResult.success();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":

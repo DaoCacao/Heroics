@@ -1,6 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
+import 'package:heroics/domain/use_case/validation/validate_confirm_password_use_case.dart';
+import 'package:heroics/domain/use_case/validation/validate_email_use_case.dart';
+import 'package:heroics/domain/use_case/validation/validate_password_use_case.dart';
 
 part 'sign_up_by_email_bloc.freezed.dart';
 
@@ -9,174 +12,118 @@ part 'sign_up_by_email_bloc.freezed.dart';
 /// This bloc will emit [SignUpByEmailState] when state is changed.
 /// This bloc will handle [SignUpByEmailEvent] when event is added.
 class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
-  /// Regex to validate email.
-  static const String _emailRegex = r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-
-  /// Regex to validate password.
-  static const String _passwordRegex = r"^[a-zA-Z0-9]{6,}$";
-
   final SignUpByEmailUseCase _signUpByEmailUseCase;
+  final ValidateEmailUseCase _validateEmailUseCase;
+  final ValidatePasswordUseCase _validatePasswordUseCase;
+  final ValidateConfirmPasswordUseCase _validateConfirmPasswordUseCase;
 
   SignUpByEmailBloc(
     this._signUpByEmailUseCase,
-  ) : super(SignUpByEmailState.initial()) {
+    this._validateEmailUseCase,
+    this._validatePasswordUseCase,
+    this._validateConfirmPasswordUseCase,
+  ) : super(const SignUpByEmailState.idle()) {
     on<SignUpByEmailEvent>((event, emit) => event.map(
           onEmailChange: (event) => _onEmailChange(event, emit),
           onPasswordChange: (event) => _onPasswordChange(event, emit),
-          onConfirmPasswordChange: (event) =>
-              _onConfirmPasswordChange(event, emit),
+          onConfirmPasswordChange: (event) => _onConfirmPasswordChange(event, emit),
           onSignUp: (event) => _onSignUp(event, emit),
         ));
   }
 
   /// Function to handle [SignUpByEmailEvent.onEmailChange].
-  /// Emit new state with [email] and [error] is null.
-  void _onEmailChange(
-    _OnEmailChange event,
-    Emitter<SignUpByEmailState> emit,
-  ) async {
-    emit(state.copyWith(
-      email: event.email,
-      error: null,
-    ));
+  /// Emit idle() if state is not [_Loading].
+  void _onEmailChange(_OnEmailChange event, Emitter<SignUpByEmailState> emit) async {
+    if (state is _Loading) return;
+    emit(const SignUpByEmailState.idle());
   }
 
   /// Function to handle [SignUpByEmailEvent.onPasswordChange].
-  /// Emit new state with [password] and [error] is null.
-  void _onPasswordChange(
-    _OnPasswordChange event,
-    Emitter<SignUpByEmailState> emit,
-  ) async {
-    emit(state.copyWith(
-      password: event.password,
-      error: null,
-    ));
+  /// Emit idle() if state is not [_Loading].
+  void _onPasswordChange(_OnPasswordChange event, Emitter<SignUpByEmailState> emit) async {
+    if (state is _Loading) return;
+    emit(const SignUpByEmailState.idle());
   }
 
   /// Function to handle [SignUpByEmailEvent.onConfirmPasswordChange].
-  /// Emit new state with [confirmPassword] and [error] is null.
+  /// Emit idle() if state is not [_Loading].
   void _onConfirmPasswordChange(
-    _OnConfirmPasswordChange event,
-    Emitter<SignUpByEmailState> emit,
-  ) async {
-    emit(state.copyWith(
-      confirmPassword: event.confirmPassword,
-      error: null,
-    ));
+      _OnConfirmPasswordChange event, Emitter<SignUpByEmailState> emit) async {
+    if (state is _Loading) return;
+    emit(const SignUpByEmailState.idle());
   }
 
   /// Function to handle [SignUpByEmailEvent.onSignUp].
   /// Validate form, emit loading, try to sign up by email, emit new state.
-  /// If email is invalid, emit new state with [error] is [SignUpByEmailStateError.invalidEmail].
-  /// If password is invalid, emit new state with [error] is [SignUpByEmailStateError.weakPassword].
-  /// If confirm password is invalid, emit new state with [error] is [SignUpByEmailStateError.confirmPasswordNotMatch].
-  /// Emit new state with [isLoading] is true.
-  /// After sign up emit state with [isLoading] is false.
-  /// If sign up by email is success, emit new state with [isSuccess] is true, [error] is null.
-  /// If sign up by email is failure with email is already in use, emit new state with [error] is [SignUpByEmailStateError.alreadyInUse].
-  /// If sign up by email is failure with email is invalid, emit new state with [error] is [SignUpByEmailStateError.invalidEmail].
-  /// If sign up by email is failure with password is weak, emit new state with [error] is [SignUpByEmailStateError.weakPassword].
-  void _onSignUp(
-    _OnSignUp event,
-    Emitter<SignUpByEmailState> emit,
-  ) async {
-    /// Validate email, password, confirm password.
-    if (!_isEmailValid(event.email)) {
-      emit(state.copyWith(
-        email: event.email,
-        error: const SignUpByEmailStateError.invalidEmail(),
-      ));
+  /// If email is invalid, emit failure state with [error] is [SignUpByEmailStateError.invalidEmail].
+  /// If password is invalid, emit failure state with [error] is [SignUpByEmailStateError.weakPassword].
+  /// If confirm password is invalid, emit failure state with [error] is [SignUpByEmailStateError.confirmPasswordNotMatch].
+  /// Emit loading state.
+  /// Sign up by email.
+  /// If sign up by email is success, emit success state.
+  /// If sign up by email is failure with email is already in use, emit failure state with [error] is [SignUpByEmailStateError.alreadyInUse].
+  /// If sign up by email is failure with email is invalid, emit failure state with [error] is [SignUpByEmailStateError.invalidEmail].
+  /// If sign up by email is failure with password is weak, emit failure state with [error] is [SignUpByEmailStateError.weakPassword].
+  void _onSignUp(_OnSignUp event, Emitter<SignUpByEmailState> emit) async {
+    /// Validate email.
+    if (!_validateEmailUseCase(event.email)) {
+      emit(const SignUpByEmailState.failure(SignUpByEmailStateError.invalidEmail()));
       return;
     }
-    if (!_isPasswordValid(event.password)) {
-      emit(state.copyWith(
-        email: event.email,
-        password: event.password,
-        error: const SignUpByEmailStateError.weakPassword(),
-      ));
+
+    /// Validate password.
+    if (!_validatePasswordUseCase(event.password)) {
+      emit(const SignUpByEmailState.failure(SignUpByEmailStateError.weakPassword()));
       return;
     }
-    if (!_isConfirmPasswordValid(
-      event.password,
-      event.confirmPassword,
-    )) {
-      emit(state.copyWith(
-        email: event.email,
-        password: event.password,
-        confirmPassword: event.confirmPassword,
-        error: const SignUpByEmailStateError.confirmPasswordNotMatch(),
-      ));
+
+    /// Validate confirm password.
+    if (!_validateConfirmPasswordUseCase(event.password, event.confirmPassword)) {
+      emit(const SignUpByEmailState.failure(SignUpByEmailStateError.confirmPasswordNotMatch()));
       return;
     }
-    emit(state.copyWith(isLoading: true));
-    final result = await _signUpByEmailUseCase(
-      email: state.email,
-      password: state.password,
-    );
+
+    /// Emits loading state.
+    emit(const SignUpByEmailState.loading());
+
+    /// Sign up by email.
+    final result = await _signUpByEmailUseCase(event.email, event.password);
+
+    /// Emits new state.
     result.when(
-      success: (profile) => emit(
-        state.copyWith(
-          isLoading: false,
-          isSuccess: true,
-          error: null,
-        ),
-      ),
-      failure: (error) => emit(
-        state.copyWith(
-          isLoading: false,
-          isSuccess: false,
-          error: error.when(
-            alreadyInUse: () => const SignUpByEmailStateError.alreadyInUse(),
-            invalidEmail: () => const SignUpByEmailStateError.invalidEmail(),
-            weakPassword: () => const SignUpByEmailStateError.weakPassword(),
-          ),
-        ),
-      ),
-    );
+        success: () => emit(const SignUpByEmailState.success()),
+        failure: (error) => emit(SignUpByEmailState.failure(error.when(
+              alreadyInUse: () => const SignUpByEmailStateError.alreadyInUse(),
+              invalidEmail: () => const SignUpByEmailStateError.invalidEmail(),
+              weakPassword: () => const SignUpByEmailStateError.weakPassword(),
+            ))));
   }
-
-  /// Function to validate [email].
-  /// [email] must be not empty and match with regex.
-  bool _isEmailValid(String email) =>
-      email.isNotEmpty && RegExp(_emailRegex).hasMatch(email);
-
-  /// Function to validate [password].
-  /// [password] must be not empty and match with regex.
-  bool _isPasswordValid(String password) =>
-      password.isNotEmpty && RegExp(_passwordRegex).hasMatch(password);
-
-  /// Function to validate [confirmPassword].
-  /// Confirm password must be not empty and match with [password].
-  bool _isConfirmPasswordValid(String password, String confirmPassword) =>
-      confirmPassword.isNotEmpty && password == confirmPassword;
 }
 
 /// Sign up by email event.
-/// Using [freezed] package.
-/// Using [onEmailChange], [onPasswordChange], [onConfirmPasswordChange], [onSignUp].
 @freezed
 class SignUpByEmailEvent with _$SignUpByEmailEvent {
   /// Event when email change.
   /// Using [email].
-  factory SignUpByEmailEvent.onEmailChange(
+  const factory SignUpByEmailEvent.onEmailChange(
     String email,
   ) = _OnEmailChange;
 
   /// Event when password change.
   /// Using [password].
-  factory SignUpByEmailEvent.onPasswordChange(
+  const factory SignUpByEmailEvent.onPasswordChange(
     String password,
   ) = _OnPasswordChange;
 
   /// Event when confirm password change.
   /// Using [confirmPassword].
-  factory SignUpByEmailEvent.onConfirmPasswordChange(
+  const factory SignUpByEmailEvent.onConfirmPasswordChange(
     String confirmPassword,
   ) = _OnConfirmPasswordChange;
 
   /// Event when sign up.
   /// Using [email], [password], [confirmPassword].
-  factory SignUpByEmailEvent.onSignUp(
+  const factory SignUpByEmailEvent.onSignUp(
     String email,
     String password,
     String confirmPassword,
@@ -186,27 +133,23 @@ class SignUpByEmailEvent with _$SignUpByEmailEvent {
 /// Sign up by email state.
 @freezed
 class SignUpByEmailState with _$SignUpByEmailState {
-  /// State when sign up by email.
-  /// Using [email], [password], [confirmPassword], [isLoading], [isSuccess], [error].
-  const factory SignUpByEmailState({
-    required String email,
-    required String password,
-    required String confirmPassword,
-    required bool isLoading,
-    required bool isSuccess,
-    required SignUpByEmailStateError? error,
-  }) = _SignUpByEmailState;
+  /// Idle state.
+  /// Default state.
+  const factory SignUpByEmailState.idle() = _Idle;
 
-  /// Initial state.
-  /// Using [email] is empty, [password] is empty, [confirmPassword] is empty, [isLoading] is false, [isSuccess] is false, [error] is null.
-  factory SignUpByEmailState.initial() => const _SignUpByEmailState(
-        email: "",
-        password: "",
-        confirmPassword: "",
-        isLoading: false,
-        isSuccess: false,
-        error: null,
-      );
+  /// Loading state.
+  /// Emits while sign up by email in progress.
+  const factory SignUpByEmailState.loading() = _Loading;
+
+  /// Success state.
+  /// Emits when sign up by email is success.
+  const factory SignUpByEmailState.success() = _Success;
+
+  /// Failure state.
+  /// Emits when sign up by email is failure.
+  const factory SignUpByEmailState.failure(
+    SignUpByEmailStateError error,
+  ) = _Failure;
 }
 
 /// Sign up by email error.
@@ -222,6 +165,5 @@ class SignUpByEmailStateError with _$SignUpByEmailStateError {
   const factory SignUpByEmailStateError.weakPassword() = _WeakPassword;
 
   /// Error when confirm password not match.
-  const factory SignUpByEmailStateError.confirmPasswordNotMatch() =
-      _ConfirmPasswordNotMatch;
+  const factory SignUpByEmailStateError.confirmPasswordNotMatch() = _ConfirmPasswordNotMatch;
 }
