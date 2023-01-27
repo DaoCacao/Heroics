@@ -5,7 +5,7 @@ import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/domain/bloc/auth/auth_bloc.dart';
 import 'package:heroics/domain/bloc/theme/theme_bloc.dart';
 import 'package:heroics/presentation/screen/enter/enter_route.dart';
-import 'package:heroics/presentation/screen/settings/settings_route.dart';
+import 'package:heroics/presentation/screen/main/main_router.dart';
 
 /// App.
 class App extends StatelessWidget {
@@ -60,7 +60,7 @@ class RouteScreen extends StatelessWidget {
         listener: (context, state) => state.when(
           initial: () => null,
           unauthorized: () => Navigator.pushReplacement(context, EnterRoute()),
-          authorized: () => Navigator.pushReplacement(context, SettingsRoute()),
+          authorized: () => Navigator.pushReplacement(context, MainRoute()),
         ),
         child: const Center(
           child: CircularProgressIndicator(),

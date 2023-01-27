@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class EnterScreen extends StatelessWidget {
   final bool isLoading;
-  final VoidCallback onSignUpClick;
-  final VoidCallback onSignInClick;
-  final VoidCallback onSignUpAsGuestClick;
+  final Function() onSignUpClick;
+  final Function() onSignInClick;
+  final Function() onSignUpAsGuestClick;
 
   const EnterScreen({
     super.key,
