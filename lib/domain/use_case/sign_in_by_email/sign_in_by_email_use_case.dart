@@ -9,9 +9,8 @@ class SignInByEmailUseCase {
 
   SignInByEmailUseCase(this.authRepository);
 
-  Future<SignInByEmailResult> call(String email, String password) {
-    return authRepository.signInByEmail(email, password);
-  }
+  Future<SignInByEmailResult> call(String email, String password) =>
+      authRepository.signInByEmail(email, password);
 }
 
 @freezed

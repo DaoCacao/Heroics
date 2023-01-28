@@ -5,7 +5,5 @@ class SignOutUseCase {
 
   SignOutUseCase(this.authRepository);
 
-  Future call() {
-    return authRepository.logout();
-  }
+  Future call() => authRepository.logout();
 }

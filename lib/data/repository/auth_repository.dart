@@ -13,10 +13,8 @@ class AuthRepository {
     return _firebaseAuth.currentUser != null;
   }
 
-  Future<ProfileModel> signUpAsGuest() async {
-    final credentials = await _firebaseAuth.signInAnonymously();
-    final user = mapProfile(credentials.user!);
-    return user;
+  Future signUpAsGuest() async {
+    await _firebaseAuth.signInAnonymously();
   }
 
   /// Sign up by email.

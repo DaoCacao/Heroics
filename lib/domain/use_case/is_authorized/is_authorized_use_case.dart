@@ -5,7 +5,5 @@ class IsAuthorizedUseCase {
 
   IsAuthorizedUseCase(this.authRepository);
 
-  bool call() {
-    return authRepository.isAuthorized();
-  }
+  bool call() => authRepository.isAuthorized();
 }

@@ -11,9 +11,8 @@ class SignUpByEmailUseCase {
 
   SignUpByEmailUseCase(this.authRepository);
 
-  Future<SignUpByEmailResult> call(String email, String password) async {
-    return authRepository.signUpByEmail(email, password);
-  }
+  Future<SignUpByEmailResult> call(String email, String password) =>
+      authRepository.signUpByEmail(email, password);
 }
 
 /// Sign up by email result.
@@ -23,12 +22,8 @@ class SignUpByEmailResult with _$SignUpByEmailResult {
   factory SignUpByEmailResult.success() = _Success;
 
   /// Sign up by email failure.
-  /// This result will return [SignUpByEmailResultError] when sign up by email failure.
-  /// This result will return [SignUpByEmailResultError.alreadyInUse] when email is already in use.
-  /// This result will return [SignUpByEmailResultError.invalidEmail] when email is invalid.
-  /// This result will return [SignUpByEmailResultError.weakPassword] when password is weak.
-  factory SignUpByEmailResult.failure(SignUpByEmailResultError error) =
-      _Failure;
+  /// Using [SignUpByEmailResultError] when sign up by email failure.
+  factory SignUpByEmailResult.failure(SignUpByEmailResultError error) = _Failure;
 }
 
 /// Sign up by email result error.
