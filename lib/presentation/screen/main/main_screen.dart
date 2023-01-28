@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heroics/domain/bloc/main/main_bloc.dart';
+import 'package:heroics/presentation/screen/main/main_bloc.dart';
 
 /// Main screen.
 class MainScreen extends StatelessWidget {

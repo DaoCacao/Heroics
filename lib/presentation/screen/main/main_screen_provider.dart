@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heroics/domain/bloc/main/main_bloc.dart';
+import 'package:heroics/presentation/screen/main/main_bloc.dart';
 import 'package:heroics/presentation/screen/main/main_screen.dart';
 import 'package:heroics/presentation/screen/settings/settings_route.dart';
 
