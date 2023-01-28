@@ -1,6 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:heroics/data/mapper/user_mapper.dart';
-import 'package:heroics/domain/model/profile_model.dart';
 import 'package:heroics/domain/use_case/sign_in_by_email/sign_in_by_email_use_case.dart';
 import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 
@@ -30,7 +28,7 @@ class AuthRepository {
     String password,
   ) async {
     try {
-      final credentials = await _firebaseAuth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -60,27 +58,34 @@ class AuthRepository {
     String password,
   ) async {
     try {
-      final credentials = await _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      final user = mapProfile(credentials.user!);
-      return SignInByEmailResult.success(user);
+      return const SignInByEmailResult.success();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "invalid-email":
-          return SignInByEmailResult.invalidEmail();
+          return const SignInByEmailResult.failure(
+            SignInByEmailResultError.invalidEmail(),
+          );
         case "user-disabled":
-          return SignInByEmailResult.userNotFound();
+          return const SignInByEmailResult.failure(
+            SignInByEmailResultError.userNotFound(),
+          );
         case "user-not-found":
-          return SignInByEmailResult.userNotFound();
+          return const SignInByEmailResult.failure(
+            SignInByEmailResultError.userNotFound(),
+          );
         case "wrong-password":
-          return SignInByEmailResult.wrongPassword();
+          return const SignInByEmailResult.failure(
+            SignInByEmailResultError.wrongPassword(),
+          );
         default:
           rethrow;
       }
     }
   }
 
-  Future logout() => _firebaseAuth.signOut();
+  Future signOut() => _firebaseAuth.signOut();
 }

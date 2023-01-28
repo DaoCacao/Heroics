@@ -5,8 +5,8 @@ part 'profile_model.freezed.dart';
 @freezed
 class ProfileModel with _$ProfileModel {
   const factory ProfileModel({
-    required this.id,
-    required this.name,
-    required this.isGuest,
+    required String id,
+    required String name,
+    required bool isGuest,
   }) = _ProfileModel;
 }

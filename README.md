@@ -24,8 +24,10 @@ After updating splash screen settings run:
 flutter pub run flutter_native_splash:create
 ```
 
-For update screenshot tests run:
+For generate coverage and open report run:
 
 ```
-flutter test --update-goldens
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html
+open coverage/html/index.html
 ```

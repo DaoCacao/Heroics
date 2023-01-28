@@ -15,7 +15,7 @@ class EnterCubit extends Cubit<EnterState> {
 
   void signUpAsGuest() async {
     emit(EnterState.loading());
-    final result = await signUpAsGuestUseCase();
+    await signUpAsGuestUseCase();
     emit(EnterState.authorized());
   }
 }

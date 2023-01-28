@@ -11,6 +11,7 @@ class SignUpByEmailUseCase {
 
   SignUpByEmailUseCase(this.authRepository);
 
+  /// Sign up by email.
   Future<SignUpByEmailResult> call(String email, String password) =>
       authRepository.signUpByEmail(email, password);
 }
