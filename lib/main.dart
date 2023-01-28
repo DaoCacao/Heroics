@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/firebase_options.dart';
 import 'package:heroics/logger/app_bloc_observer.dart';
+import 'package:heroics/presentation/app/app_provider.dart';
 import 'package:logger/logger.dart';
 
 import 'logger/logger.dart';
-import 'presentation/app.dart';
 
 final log = Log(logger: Logger(printer: SimplePrinter()));
 
@@ -19,8 +19,7 @@ void main() async {
   await setupDependencies();
   await _initFirebase();
   Bloc.observer = AppBlocObserver();
-
-  runApp(const App());
+  runApp(const AppProvider());
 }
 
 /// Initialize Firebase services.
@@ -28,18 +27,19 @@ Future _initFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (kReleaseMode) {
+    /// Pass all uncaught "fatal" errors from the framework to Crashlytics
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-  /// Pass all uncaught "fatal" errors from the framework to Crashlytics
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    /// Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics.
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 
-  /// Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
-
-  /// Change the default fetch timeout and minimum fetch interval for debug mode.
   if (kDebugMode) {
+    /// Configure Remote Config to use developer mode to relax fetch throttling.
     await FirebaseRemoteConfig.instance.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),

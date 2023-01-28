@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:heroics/di/service_locator.dart';
 import 'package:heroics/domain/use_case/sign_up_by_email/sign_up_by_email_use_case.dart';
 import 'package:heroics/domain/use_case/validation/validate_confirm_password_use_case.dart';
 import 'package:heroics/domain/use_case/validation/validate_email_use_case.dart';
@@ -30,6 +31,8 @@ class SignUpByEmailBloc extends Bloc<SignUpByEmailEvent, SignUpByEmailState> {
           onSignUp: (event) => _onSignUp(event, emit),
         ));
   }
+
+  SignUpByEmailBloc.inject() : this(inject(), inject(), inject(), inject());
 
   /// Function to handle [SignUpByEmailEvent.onEmailChange].
   /// Emit idle() if state is not [_Loading].

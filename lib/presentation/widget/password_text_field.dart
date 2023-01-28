@@ -9,7 +9,11 @@ class PasswordTextField extends TextFormField {
     String? error,
   }) : super(
           decoration: InputDecoration(
-            label: Text(label),
+            label: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             border: const OutlineInputBorder(),
             errorText: error,
           ),

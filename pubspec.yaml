@@ -18,6 +18,8 @@ dependencies:
 
   flutter_native_splash: ^2.2.17
 
+  logger: ^1.1.0
+
   # Firebase
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
@@ -27,13 +29,16 @@ dependencies:
   firebase_dynamic_links: ^5.0.11
   firebase_performance: ^0.9.0+10
 
-  logger: ^1.1.0
-  flutter_bloc: ^8.1.1
-  rxdart: ^0.27.7
-  provider: ^6.0.5
-  freezed_annotation: ^2.2.0
-  shared_preferences: ^2.0.17
+  # Dependency injection
   get_it: ^7.2.0
+
+  # State management
+  flutter_bloc: ^8.1.1
+  freezed_annotation: ^2.2.0
+  rxdart: ^0.27.7
+
+  # Local storage
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:

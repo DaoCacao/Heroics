@@ -5,7 +5,7 @@ import 'package:heroics/presentation/screen/main/main_screen.dart';
 import 'package:heroics/presentation/screen/settings/settings_route.dart';
 
 /// Main screen provider.
-/// Connects the bloc to the screen.
+/// This provider is used to provide [MainBloc] to [MainScreen].
 class MainScreenProvider extends StatelessWidget {
   const MainScreenProvider({super.key});
 

@@ -23,3 +23,9 @@ After updating splash screen settings run:
 ```
 flutter pub run flutter_native_splash:create
 ```
+
+For update screenshot tests run:
+
+```
+flutter test --update-goldens
+```

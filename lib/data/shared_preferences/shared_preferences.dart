@@ -1,11 +1,23 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'model/preference.dart';
+
 class AppSharedPreferences {
   final SharedPreferences _preferences;
 
-  const AppSharedPreferences(this._preferences);
+  /// Is dark theme enabled.
+  /// If null, system theme will be used.
+  /// If true, dark theme will be used.
+  /// If false, light theme will be used.
+  late PreferenceEntry<bool?> _isDarkTheme;
 
-  bool get isDarkTheme => _preferences.getBool("is_dark_theme") ?? false;
+  AppSharedPreferences(this._preferences) {
+    _isDarkTheme = PreferenceEntry("is_dark_theme", null, _preferences);
+  }
 
-  set isDarkTheme(bool value) => _preferences.setBool("is_dark_theme", value);
+  bool? get isDarkTheme => _isDarkTheme.get();
+
+  set isDarkTheme(bool? value) => _isDarkTheme.set(value);
+
+  Stream<bool?> listenIsDarkTheme() => _isDarkTheme.listen();
 }

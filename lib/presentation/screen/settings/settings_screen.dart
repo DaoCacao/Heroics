@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heroics/domain/bloc/auth/auth_bloc.dart';
-import 'package:heroics/domain/bloc/theme/theme_bloc.dart';
-import 'package:heroics/presentation/screen/enter/enter_route.dart';
+import 'package:heroics/domain/model/theme/theme_variants.dart';
 
+/// Settings screen.
 class SettingsScreen extends StatelessWidget {
-  final ThemeBloc themeBloc;
-  final AuthBloc authBloc;
+  final ThemeVariant theme;
+  final void Function(ThemeVariant) onThemeChange;
+  final void Function() onSignOutClick;
 
   const SettingsScreen({
     super.key,
-    required this.themeBloc,
-    required this.authBloc,
+    required this.theme,
+    required this.onThemeChange,
+    required this.onSignOutClick,
   });
 
   @override
@@ -23,35 +23,31 @@ class SettingsScreen extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
-            title: const Text("Dark theme"),
-            trailing: BlocBuilder<ThemeBloc, ThemeState>(
-              bloc: themeBloc,
-              builder: (context, state) => Switch(
-                value: state.when(
-                  darkTheme: () => true,
-                  lightTheme: () => false,
+            title: const Text("App theme"),
+            trailing: DropdownButton<ThemeVariant>(
+              value: theme,
+              onChanged: (value) => onThemeChange(value!),
+              items: const [
+                DropdownMenuItem(
+                  value: ThemeVariant.defaultTheme(),
+                  child: Text("System"),
                 ),
-                onChanged: (value) => context.read<ThemeBloc>().add(ThemeEvent.switchTheme(value)),
-              ),
+                DropdownMenuItem(
+                  value: ThemeVariant.lightTheme(),
+                  child: Text("Light"),
+                ),
+                DropdownMenuItem(
+                  value: ThemeVariant.darkTheme(),
+                  child: Text("Dark"),
+                ),
+              ],
             ),
           ),
           const Spacer(),
           SafeArea(
-            child: BlocListener<AuthBloc, AuthState>(
-              bloc: authBloc,
-              listener: (context, state) => state.when(
-                initial: () => null,
-                authorized: () => null,
-                unauthorized: () => Navigator.pushAndRemoveUntil(
-                  context,
-                  EnterRoute(),
-                  (route) => false,
-                ),
-              ),
-              child: TextButton(
-                onPressed: () => context.read<AuthBloc>().add(AuthEvent.signOut()),
-                child: const Text("Sign out"),
-              ),
+            child: TextButton(
+              onPressed: onSignOutClick,
+              child: const Text("Sign out"),
             ),
           ),
         ],
