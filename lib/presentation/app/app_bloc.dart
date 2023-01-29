@@ -18,17 +18,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           init: (event) => _init(event, emit),
           updateTheme: (event) => _updateTheme(event, emit),
         ));
-
-    _listenThemeUseCase().listen((theme) {
-      add(AppEvent.updateTheme(theme));
-    });
   }
 
   /// Function to handle [AppEvent.init].
   /// Check theme and emit [AppState.idle].
+  /// Listen theme and emit [AppState.idle] with new theme.
   void _init(_Init event, Emitter<AppState> emit) {
     final theme = _checkThemeUseCase();
     emit(AppState.idle(theme));
+    _listenThemeUseCase().listen((theme) {
+      add(AppEvent.updateTheme(theme));
+    });
   }
 
   /// Function to handle [AppEvent.updateTheme].
